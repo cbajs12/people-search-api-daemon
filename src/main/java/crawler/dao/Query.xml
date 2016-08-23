@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="daemon">
+    <!--&lt;!&ndash; Alias &ndash;&gt;-->
+    <!--<typeAlias type="crawler.service.vo.StatusVO" alias="statusVO" />-->
+    <!--<typeAlias type="crawler.service.vo.DataVO" alias="dataVO" />-->
+
+    <!--<select id="getStatusData" parameterClass="dataVO" resultClass="statusVO">-->
+        <!--/*+ getStatusData */-->
+        <!--SELECT CRAWLER_SEQ-->
+        <!--, MEMBER_SEQ-->
+        <!--, RES_KEY-->
+        <!--, SUBJECT-->
+        <!--, ST_DT-->
+        <!--, END_DT-->
+        <!--, KEYWORD-->
+        <!--, STATUS-->
+        <!--, REG_ID-->
+        <!--, REG_DT-->
+        <!--, SEARCH_ROW-->
+        <!--FROM CRAWLER-->
+        <!--WHERE KEYWORD = #keyword#-->
+        <!--AND ST_DT = #st_dt#-->
+        <!--AND END_DT = #end_dt#-->
+    <!--</select>-->
+
+
+    <!--<update id="updateStatusData" parameterClass="dataVO">-->
+        <!--/*+ updateStatusData */-->
+        <!--UPDATE CRAWLER-->
+        <!--SET RES_KEY = #req_key#, STATUS = #status#-->
+        <!--WHERE CRAWLER_SEQ = #crawler_seq#-->
+    <!--</update>-->
+
+    <!--<select id="getDataList" resultClass="dataVO">-->
+        <!--/*+ getStatusData */-->
+        <!--SELECT CRAWLER_SEQ AS crawler_seq-->
+        <!--, ST_DT AS  st_dt-->
+        <!--, END_DT AS  end_dt-->
+        <!--, KEYWORD  AS keyword-->
+        <!--, SEARCH_ROW AS search_row-->
+        <!--FROM CRAWLER-->
+        <!--WHERE STATUS != 'CR003'-->
+        <!--AND ROWNUM <![CDATA[<= ]]> 10-->
+    <!--</select>-->
+</sqlMap>
