@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <properties resource="sqlmap.properties" />
+    <!--   <properties resource="/ncds/fileset_deamon-1.0/deamon.properties" /> -->
+
+    <settings
+            cacheModelsEnabled="true"
+            enhancementEnabled="true"
+            lazyLoadingEnabled="true"
+            maxRequests="512"
+            maxSessions="128"
+            maxTransactions="32"
+            useStatementNamespaces="true"
+    />
+
+    <transactionManager type="JDBC">
+        <!-- <dataSource type="DBCP"> -->
+        <dataSource type="SIMPLE">
+            <property  name="JDBC.Driver" value="${jdbc.driver}"/>
+            <property  name="JDBC.ConnectionURL" value="${jdbc.url}" />
+            <property name="JDBC.Username" value="${jdbc.username}" />
+            <property name="JDBC.Password" value="${jdbc.password}"/>
+            <property name="validationQuery" value="select 1 from dual"/>
+            <property name="Pool.MaximumActiveConnections" value="100"/>
+            <property name="Pool.MaximumIdleConnections" value="500"/>
+            <property name="Pool.MaximumCheckoutTime" value="120000"/>
+            <property name="Pool.TimeToWait" value="500"/>
+            <property name="Pool.PingQuery" value="select sysdate from dual"/>
+            <property name="Pool.PingEnabled" value="true"/>
+            <property name="pool.PingConnectionsNotUsedFor" value="5000"/>
+        </dataSource>
+    </transactionManager>
+
+    <sqlMap resource="crawler/dao/Query.xml"/>
+
+</sqlMapConfig>

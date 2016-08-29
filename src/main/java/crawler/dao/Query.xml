@@ -2,29 +2,12 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="daemon">
-    <!--&lt;!&ndash; Alias &ndash;&gt;-->
-    <!--<typeAlias type="crawler.service.vo.StatusVO" alias="statusVO" />-->
-    <!--<typeAlias type="crawler.service.vo.DataVO" alias="dataVO" />-->
-
-    <!--<select id="getStatusData" parameterClass="dataVO" resultClass="statusVO">-->
-        <!--/*+ getStatusData */-->
-        <!--SELECT CRAWLER_SEQ-->
-        <!--, MEMBER_SEQ-->
-        <!--, RES_KEY-->
-        <!--, SUBJECT-->
-        <!--, ST_DT-->
-        <!--, END_DT-->
-        <!--, KEYWORD-->
-        <!--, STATUS-->
-        <!--, REG_ID-->
-        <!--, REG_DT-->
-        <!--, SEARCH_ROW-->
-        <!--FROM CRAWLER-->
-        <!--WHERE KEYWORD = #keyword#-->
-        <!--AND ST_DT = #st_dt#-->
-        <!--AND END_DT = #end_dt#-->
-    <!--</select>-->
-
+    <!-- Alias -->
+    <typeAlias type="crawler.vo.BaseVO" alias="baseVO" />
+    <typeAlias type="crawler.vo.CareerVO" alias="careerVO" />
+    <typeAlias type="crawler.vo.DetailVO" alias="detailVO" />
+    <typeAlias type="crawler.vo.FamilyVO" alias="familyVO" />
+    <typeAlias type="crawler.vo.NameVO" alias="nameVO" />
 
     <!--<update id="updateStatusData" parameterClass="dataVO">-->
         <!--/*+ updateStatusData */-->
