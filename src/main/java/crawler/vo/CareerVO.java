@@ -1,14 +1,14 @@
 package crawler.vo;
 
 public class CareerVO {
-    private int id;
+    private int career_seq;
     private String st_dt;
     private String end_dt;
     private String description;
     private String career_code;
 
     public CareerVO(CareerVO vo) {
-        this.id = vo.getId();
+        this.career_seq = vo.getCareer_seq();
         this.st_dt = vo.getSt_dt();
         this.end_dt = vo.getEnd_dt();
         this.description = vo.getDescription();
@@ -16,19 +16,19 @@ public class CareerVO {
     }
 
     public CareerVO(int id, String st_dt, String end_dt, String description, String career_code) {
-        this.id = id;
+        this.career_seq = id;
         this.st_dt = st_dt;
         this.end_dt = end_dt;
         this.description = description;
         this.career_code = career_code;
     }
 
-    public int getId() {
-        return id;
+    public int getCareer_seq() {
+        return career_seq;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCareer_seq(int career_seq) {
+        this.career_seq = career_seq;
     }
 
     public String getSt_dt() {

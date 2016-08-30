@@ -1,28 +1,28 @@
 package crawler.vo;
 
 public class FamilyVO {
-    private int id;
+    private int family_seq;
     private String fm_os;
     private String fm_name;
 
     public FamilyVO(FamilyVO vo) {
-        this.id = vo.getId();
+        this.family_seq = vo.getFamily_seq();
         this.fm_os = vo.getFm_os();
         this.fm_name = vo.getFm_name();
     }
 
     public FamilyVO(int id, String fm_os, String fm_name) {
-        this.id = id;
+        this.family_seq = id;
         this.fm_os = fm_os;
         this.fm_name = fm_name;
     }
 
-    public int getId() {
-        return id;
+    public int getFamily_seq() {
+        return family_seq;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFamily_seq(int family_seq) {
+        this.family_seq = family_seq;
     }
 
     public String getFm_os() {

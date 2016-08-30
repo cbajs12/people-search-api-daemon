@@ -39,7 +39,7 @@ public class ThreadManager{
         getServiceInstance();
 
         synchronized (getServiceInstance()) {
-            scheduler.scheduleAtFixedRate(new MainThreadWork(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS);
+            scheduler.scheduleAtFixedRate(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS);
         }
 
         taskStatus = 1;
@@ -98,14 +98,14 @@ public class ThreadManager{
 //    }
 }
 
-//class ThreadWork  extends Thread{
+//class WorkThread  extends Thread{
 //private static Logger logger = LoggerFactory.getLogger(ThreadWork.class);
 //    private DataVO dataVO = new DataVO();
 //    private CrawlerService crawelerService = new CrawlerService();
 //
-//    public ThreadWork(){ }
+//    public WorkThread(){ }
 //
-//    public ThreadWork(DataVO vo){dataVO = vo; }
+//    public WorkThread(DataVO vo){dataVO = vo; }
 //
 //    public void run() {
 //        try {
@@ -129,10 +129,10 @@ public class ThreadManager{
 //}
 
 
-class MainThreadWork  implements Runnable{
-    private static Logger logger = LoggerFactory.getLogger(MainThreadWork.class);
+class MainThread  implements Runnable{
+    private static Logger logger = LoggerFactory.getLogger(MainThread.class);
 
-    public MainThreadWork(){ }
+    public MainThread(){ }
 
     public void run() {
         try {

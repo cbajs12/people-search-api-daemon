@@ -1,55 +1,55 @@
 package crawler.vo;
 
 public class NameVO {
-    private int id;
-    private String os;
-    private String name;
-    private String flag;
+    private int name_seq;
+    private String name_os;
+    private String name_names;
+    private String name_code;
 
     public NameVO(NameVO vo) {
-        this.id = vo.getId();
-        this.os = vo.getOs();
-        this.name = vo.getName();
-        this.flag = vo.getFlag();
+        this.name_seq = vo.getName_seq();
+        this.name_os = vo.getName_os();
+        this.name_names = vo.getName_names();
+        this.name_code = vo.getName_code();
     }
 
     public NameVO(int id, String os, String name, String flag) {
-        this.id = id;
-        this.os = os;
-        this.name = name;
-        this.flag = flag;
+        this.name_seq = id;
+        this.name_os = os;
+        this.name_names = name;
+        this.name_code = flag;
     }
 
-    public int getId() {
-        return id;
+    public int getName_seq() {
+        return name_seq;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setName_seq(int name_seq) {
+        this.name_seq = name_seq;
     }
 
-    public String getOs() {
-        return os;
+    public String getName_os() {
+        return name_os;
     }
 
-    public void setOs(String os) {
-        this.os = os;
+    public void setName_os(String name_os) {
+        this.name_os = name_os;
     }
 
-    public String getName() {
-        return name;
+    public String getName_names() {
+        return name_names;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName_names(String name_names) {
+        this.name_names = name_names;
     }
 
-    public String getFlag() {
-        return flag;
+    public String getName_code() {
+        return name_code;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setName_code(String name_code) {
+        this.name_code = name_code;
     }
 
     //    public String toString() {

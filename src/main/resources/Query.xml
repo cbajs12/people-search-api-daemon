@@ -9,22 +9,30 @@
     <typeAlias type="crawler.vo.FamilyVO" alias="familyVO" />
     <typeAlias type="crawler.vo.NameVO" alias="nameVO" />
 
+    <select id="getBaseList" resultClass="baseVO">
+        /*+ getBaseList */
+        SELECT BASE_SEQ as base_seq
+        , BASE_NAME as base_name
+        , BASE_CODE as base_code
+        FROM SEARCHBASE
+        WHERE BASE_CODE != 'CR002'
+    </select>
+
+    <insert id="setBaseData" parameterClass="baseVO">
+        /* setBaseData */
+        insert into SEARCHBASE(BASE_NAME, BASE_CODE)
+        VALUES (#base_name#, #base_code#)
+    </insert>
+
+    <select id="getBaseData" parameterClass="baseVO" resultClass="baseVO">
+        /* getBaseData */
+        SELECT BASE_NAME FROM SEARCHBASE WHERE BASE_NAME = #base_name#
+    </select>
+
     <!--<update id="updateStatusData" parameterClass="dataVO">-->
         <!--/*+ updateStatusData */-->
         <!--UPDATE CRAWLER-->
         <!--SET RES_KEY = #req_key#, STATUS = #status#-->
         <!--WHERE CRAWLER_SEQ = #crawler_seq#-->
     <!--</update>-->
-
-    <!--<select id="getDataList" resultClass="dataVO">-->
-        <!--/*+ getStatusData */-->
-        <!--SELECT CRAWLER_SEQ AS crawler_seq-->
-        <!--, ST_DT AS  st_dt-->
-        <!--, END_DT AS  end_dt-->
-        <!--, KEYWORD  AS keyword-->
-        <!--, SEARCH_ROW AS search_row-->
-        <!--FROM CRAWLER-->
-        <!--WHERE STATUS != 'CR003'-->
-        <!--AND ROWNUM <![CDATA[<= ]]> 10-->
-    <!--</select>-->
 </sqlMap>

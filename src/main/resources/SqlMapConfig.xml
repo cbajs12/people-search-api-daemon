@@ -32,6 +32,6 @@
         </dataSource>
     </transactionManager>
 
-    <sqlMap resource="crawler/dao/Query.xml"/>
+    <sqlMap resource="Query.xml"/>
 
 </sqlMapConfig>

@@ -56,7 +56,7 @@
 
 <!-- 이 아래에 있는 애들 다 log로 찍겠다. -->
 
-    <logger name="base" level="debug" />
+    <logger name="crawler" level="debug" />
 
     <root level="info">
         <appender-ref ref="console" />
