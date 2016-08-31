@@ -51,9 +51,9 @@ public class CrawlerService {
             while ((line = reader.readLine()) != null)
             {
 //                logger.debug("name {}, size {}", line, line.length());
-                baseVO.setName(line);
-                baseVO.setFlag("CR001");
-
+                baseVO.setBase_name(line);
+                baseVO.setBase_code("CR001");
+                logger.debug(line);
                 if(!crawlerDao.setBaseData(baseVO)){
                     continue;
                 }
@@ -70,6 +70,7 @@ public class CrawlerService {
     public static void main(String args[]){
         CrawlerService crawlerService = new CrawlerService();
         crawlerService.initCrawlerData();
+        logger.debug("finished");
     }
 
 
