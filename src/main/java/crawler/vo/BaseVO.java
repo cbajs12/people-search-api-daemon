@@ -3,19 +3,19 @@ package crawler.vo;
 public class BaseVO {
     private int base_seq;
     private String base_name;
-    private String base_flag;
+    private String base_code;
 
     public BaseVO(){}
 
     public BaseVO(BaseVO vo) {
         this.base_seq = vo.getBase_seq();
-        this.base_name = vo.getName();
-        this.base_flag = vo.getFlag();
+        this.base_name = vo.getBase_name();
+        this.base_code = vo.getBase_code();
     }
 
     public BaseVO(String name, String flag) {
         this.base_name = name;
-        this.base_flag = flag;
+        this.base_code = flag;
     }
 
     public void setBase_seq(int base_seq) {
@@ -26,23 +26,23 @@ public class BaseVO {
         return base_seq;
     }
 
-    public String getName() {
+    public String getBase_name() {
         return base_name;
     }
 
-    public void setName(String name) {
-        this.base_name = name;
+    public void setBase_name(String base_name) {
+        this.base_name = base_name;
     }
 
-    public String getFlag() {
-        return base_flag;
+    public String getBase_code() {
+        return base_code;
     }
 
-    public void setFlag(String flag) {
-        this.base_flag = flag;
+    public void setBase_code(String base_code) {
+        this.base_code = base_code;
     }
 
-//    public String toString() {
+    //    public String toString() {
 //        return "BaseVO [" + getUrl() + ", " + getTitle() + "]";
 //    }
 }
