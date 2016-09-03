@@ -3,6 +3,7 @@ package crawler.dao;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import crawler.vo.BaseVO;
+import crawler.vo.NameVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,17 @@ public class CrawlerDao {
             check = true;
         } catch (SQLException e) {
             logger.debug("SET BASE DATA ERROR", e);
+        }
+        return check;
+    }
 
+    public boolean setNameData(NameVO nameVO) throws InterruptedException{
+        boolean check = false;
+        try{
+            sqlMap.insert("daemon.setNameData", nameVO);
+            check = true;
+        } catch (SQLException e) {
+            logger.debug("SET Name DATA ERROR", e);
         }
         return check;
     }

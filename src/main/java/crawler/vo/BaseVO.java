@@ -18,6 +18,11 @@ public class BaseVO {
         this.base_code = flag;
     }
 
+    public BaseVO(String name){
+        this.base_name = name;
+        this.base_code = "CR001";
+    }
+
     public void setBase_seq(int base_seq) {
         this.base_seq = base_seq;
     }

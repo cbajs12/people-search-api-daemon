@@ -29,6 +29,12 @@
         SELECT BASE_NAME FROM SEARCHBASE WHERE BASE_NAME = #base_name#
     </select>
 
+    <insert id="setNameData" parameterClass="nameVO">
+        /* setNameData */
+        insert into SEARCHBASE(NAME_OS, NAME_NAMES, NAME_CODE)
+        VALUES (#name_os#, #name_names#, #name_code#)
+    </insert>
+
     <!--<update id="updateStatusData" parameterClass="dataVO">-->
         <!--/*+ updateStatusData */-->
         <!--UPDATE CRAWLER-->
