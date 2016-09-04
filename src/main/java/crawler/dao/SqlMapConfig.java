@@ -9,11 +9,15 @@ import java.io.Reader;
 public class SqlMapConfig {
     private static SqlMapClient sqlMap;
     private String resource = "SqlMapConfig.xml";
+
     public SqlMapClient getSqlMapInstance(){
 
         return this.getSqlMapInstance(resource);
     }
 
+    /*
+        Get sqlmap instance referring config.xml
+     */
     public SqlMapClient getSqlMapInstance(String resource) {
         Reader reader;
         try{

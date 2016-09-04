@@ -35,6 +35,16 @@
         VALUES (#name_os#, #name_names#, #name_code#)
     </insert>
 
+    <select id="getNameList" resultClass="nameVO">
+        /*+ getNameList */
+        SELECT Name_SEQ as name_seq
+        , NAME_NAMES as name_names
+        , Name_CODE as name_code
+        , Name_OS as name_os
+        FROM SEARCHNAME
+        WHERE NAME_CODE != 'CR002'
+    </select>
+
     <!--<update id="updateStatusData" parameterClass="dataVO">-->
         <!--/*+ updateStatusData */-->
         <!--UPDATE CRAWLER-->

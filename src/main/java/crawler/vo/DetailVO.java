@@ -6,11 +6,11 @@ public class DetailVO {
     private int family_seq;
     private String detail_os;
     private String age;
-    private String detail_date;
     private String detail_job;
-    private String physical;
-    private String site;
-    private String religion;
+    private String profile;
+    private String detail_name;
+
+    public DetailVO(){}
 
     public DetailVO(DetailVO vo) {
         this.detail_seq = vo.getDetail_seq();
@@ -18,24 +18,20 @@ public class DetailVO {
         this.family_seq = vo.getFamily_seq();
         this.detail_os = vo.getDetail_os();
         this.age = vo.getAge();
-        this.detail_date = vo.getDetail_date();
         this.detail_job = vo.getDetail_job();
-        this.physical = vo.getPhysical();
-        this.site = vo.getSite();
-        this.religion = vo.getReligion();
+        this.profile = vo.getProfile();
+        this.detail_name = vo.getDetail_name();
     }
 
-    public DetailVO(int id, int career, int family, String os, String age, String date, String job, String physical, String site, String religion) {
+    public DetailVO(int id, int career, int family, String os, String age, String job, String profile, String detail_name) {
         this.detail_seq = id;
         this.career_seq = career;
         this.family_seq = family;
         this.detail_os = os;
         this.age = age;
-        this.detail_date = date;
         this.detail_job = job;
-        this.physical = physical;
-        this.site = site;
-        this.religion = religion;
+        this.detail_name = detail_name;
+        this.profile = profile;
     }
 
     public int getDetail_seq() {
@@ -70,14 +66,6 @@ public class DetailVO {
         this.detail_os = detail_os;
     }
 
-    public String getDetail_date() {
-        return detail_date;
-    }
-
-    public void setDetail_date(String detail_date) {
-        this.detail_date = detail_date;
-    }
-
     public String getAge() {
         return age;
     }
@@ -94,28 +82,20 @@ public class DetailVO {
         this.detail_job = detail_job;
     }
 
-    public String getPhysical() {
-        return physical;
+    public String getProfile() {
+        return profile;
     }
 
-    public void setPhysical(String physical) {
-        this.physical = physical;
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
-    public String getSite() {
-        return site;
+    public String getDetail_name() {
+        return detail_name;
     }
 
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public String getReligion() {
-        return religion;
-    }
-
-    public void setReligion(String religion) {
-        this.religion = religion;
+    public void setDetail_name(String detail_name) {
+        this.detail_name = detail_name;
     }
 
     //    public String toString() {

@@ -15,6 +15,9 @@ public class CrawlerDao {
     private static Logger logger = LoggerFactory.getLogger(CrawlerDao.class);
     private static SqlMapClient sqlMap = new SqlMapConfig().getSqlMapInstance();
 
+    /*
+        Get baseVO list with code is not CR002 from DB
+     */
     public List getBaseList() throws InterruptedException {
         BaseVO baseVO = new BaseVO();
         List baseVOList = new LinkedList<BaseVO>();
@@ -27,6 +30,9 @@ public class CrawlerDao {
         return baseVOList;
     }
 
+    /*
+        Add baseVO into DB
+     */
     public boolean setBaseData(BaseVO baseVO) throws InterruptedException{
         boolean check = false;
         try{
@@ -38,6 +44,9 @@ public class CrawlerDao {
         return check;
     }
 
+    /*
+        Add nameVO into DB
+     */
     public boolean setNameData(NameVO nameVO) throws InterruptedException{
         boolean check = false;
         try{
@@ -47,5 +56,20 @@ public class CrawlerDao {
             logger.debug("SET Name DATA ERROR", e);
         }
         return check;
+    }
+
+    /*
+        Get nameVO list with code is not CR002 from DB
+     */
+    public List getNameList() throws InterruptedException {
+        NameVO nameVO = new NameVO();
+        List nameVOList = new LinkedList<NameVO>();
+        try{
+            nameVOList = sqlMap.queryForList("daemon.getNameList", nameVO);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return nameVOList;
     }
 }
