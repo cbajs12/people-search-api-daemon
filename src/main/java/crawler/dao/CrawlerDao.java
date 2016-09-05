@@ -2,8 +2,7 @@ package crawler.dao;
 
 
 import com.ibatis.sqlmap.client.SqlMapClient;
-import crawler.vo.BaseVO;
-import crawler.vo.NameVO;
+import crawler.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,4 +71,64 @@ public class CrawlerDao {
         }
         return nameVOList;
     }
+
+    /*
+        Add familyVO into DB and return id
+     */
+    public int setFamilyData(FamilyVO familyVO) throws InterruptedException{
+        int id = 0;
+        try{
+            sqlMap.insert("daemon.setFamilyData", familyVO);
+            FamilyVO familyVO1 = getFamilyVO();
+            if(familyVO1 != null || familyVO1.getFm_json() != null || familyVO1.getFm_json().length() != 0){
+                id = familyVO1.getFamily_seq();
+            }
+
+        } catch (SQLException e) {
+            logger.debug("SET Family DATA ERROR", e);
+        }
+        return id;
+    }
+
+    /*
+        Get familyVO from DB
+     */
+    public FamilyVO getFamilyVO() throws InterruptedException{
+        FamilyVO familyVO = new FamilyVO();
+        try{
+            familyVO = (FamilyVO)sqlMap.queryForObject("daemon.getFamilyId", familyVO);
+        } catch (SQLException e) {
+            logger.debug("SET BASE DATA ERROR", e);
+        }
+        return familyVO;
+    }
+
+    /*
+        Add detailVO into DB
+     */
+    public boolean setDetailData(DetailVO detailVO) throws InterruptedException{
+        boolean check = false;
+        try{
+            sqlMap.insert("daemon.setDetailData", detailVO);
+            check = true;
+        } catch (SQLException e) {
+            logger.debug("SET Detail DATA ERROR", e);
+        }
+        return check;
+    }
+
+    /*
+        Add careerVO into DB
+     */
+    public boolean setCareerData(CareerVO careerVO) throws InterruptedException{
+        boolean check = false;
+        try{
+            sqlMap.insert("daemon.setCareerData", careerVO);
+            check = true;
+        } catch (SQLException e) {
+            logger.debug("SET Career DATA ERROR", e);
+        }
+        return check;
+    }
+
 }

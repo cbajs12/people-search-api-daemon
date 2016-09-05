@@ -31,7 +31,7 @@
 
     <insert id="setNameData" parameterClass="nameVO">
         /* setNameData */
-        insert into SEARCHBASE(NAME_OS, NAME_NAMES, NAME_CODE)
+        insert into SEARCHNAME(NAME_OS, NAME_NAMES, NAME_CODE)
         VALUES (#name_os#, #name_names#, #name_code#)
     </insert>
 
@@ -44,6 +44,18 @@
         FROM SEARCHNAME
         WHERE NAME_CODE != 'CR002'
     </select>
+
+    <insert id="setDetailData" parameterClass="detailVO">
+        /* setDetailData */
+        insert into SEARCHDETAIL(FAMILY_SEQ, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE)
+        VALUES (#family_os#, #detail_os#, #detail_job#, #detail_name#, #age#, #profile#)
+    </insert>
+
+    <insert id="setCareerData" parameterClass="careerVO">
+        /* setCareerData */
+        insert into SEARCHCAREER(CAREER_DT, CAREER_OS, DESCRIPTION)
+        VALUES (#career_dt#, #career_os#, #description#)
+    </insert>
 
     <!--<update id="updateStatusData" parameterClass="dataVO">-->
         <!--/*+ updateStatusData */-->

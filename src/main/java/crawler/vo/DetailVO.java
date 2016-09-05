@@ -2,7 +2,6 @@ package crawler.vo;
 
 public class DetailVO {
     private int detail_seq;
-    private int career_seq;
     private int family_seq;
     private String detail_os;
     private String age;
@@ -14,7 +13,6 @@ public class DetailVO {
 
     public DetailVO(DetailVO vo) {
         this.detail_seq = vo.getDetail_seq();
-        this.career_seq = vo.getCareer_seq();
         this.family_seq = vo.getFamily_seq();
         this.detail_os = vo.getDetail_os();
         this.age = vo.getAge();
@@ -23,9 +21,8 @@ public class DetailVO {
         this.detail_name = vo.getDetail_name();
     }
 
-    public DetailVO(int id, int career, int family, String os, String age, String job, String profile, String detail_name) {
+    public DetailVO(int id, int family, String os, String age, String job, String profile, String detail_name) {
         this.detail_seq = id;
-        this.career_seq = career;
         this.family_seq = family;
         this.detail_os = os;
         this.age = age;
@@ -40,14 +37,6 @@ public class DetailVO {
 
     public void setDetail_seq(int detail_seq) {
         this.detail_seq = detail_seq;
-    }
-
-    public int getCareer_seq() {
-        return career_seq;
-    }
-
-    public void setCareer_seq(int career_seq) {
-        this.career_seq = career_seq;
     }
 
     public int getFamily_seq() {

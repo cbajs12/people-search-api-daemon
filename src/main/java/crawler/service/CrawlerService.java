@@ -2,9 +2,7 @@ package crawler.service;
 
 
 import crawler.dao.CrawlerDao;
-import crawler.vo.BaseVO;
-import crawler.vo.DetailVO;
-import crawler.vo.NameVO;
+import crawler.vo.*;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +54,7 @@ public class CrawlerService {
     }
 
     /*
-        Run naver-people-search from Base Table
+        Crawling naver-people-search based on Base Table data
      */
     public void baseCrawler(){
         driver = new ChromeDriver();    // start driver
@@ -81,6 +78,9 @@ public class CrawlerService {
         driver.close();
     }
 
+    /*
+        Crawling naver-people-search based on Name Table data
+     */
     public void detailCrawler(){
         try {
             List nameVOs = crawlerDao.getNameList();
@@ -179,25 +179,29 @@ public class CrawlerService {
         wait.until(pageLoadCondition);
     }
 
-    public void detailLoadSequence(){//String os, String name
-//        String osNumber = getOsFromUrl(os);
-        String url = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=%EA%B9%80%EC%84%B1%EA%B7%BC&os=109292&ie=utf8&key=PeopleService";
-        String url2 = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=안성기&os=94590&ie=utf8&key=PeopleService";
+    /*
+        Crawling naver-people-search using JSoup and add the data into DB
+     */
+    public void detailLoadSequence(String os){//
+        String osNumber = getOsFromUrl("os");
         DetailVO detailVO = new DetailVO();
+//        String url = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=안성기&os=94590&ie=utf8&key=PeopleService";
+
         try{
             Document doc = Jsoup
-                    .connect(url2)
+                    .connect(os)
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
                     .timeout(30000).get();
 
             Elements profileWrap = doc.getElementsByClass("profile_wrap");
-//            logger.debug("Wrap {}", profileWrap);
+
             String name = profileWrap.select("dt.name").text();
             String job = profileWrap.select("dt.sub").text();
             String age = profileWrap.select("dd.dft").text();
             Elements dts = profileWrap.select("dl.dsc").select("dt");
             Elements dds = profileWrap.select("dl.dsc").select("dd");
             JSONObject obj = new JSONObject();
+            int familyId = 0;
 
             if((dds != null || dds.size() != 0) && (dts !=null || dts.size() != 0)){
                 Iterator<Element> dtsIterator = dts.iterator();
@@ -206,14 +210,38 @@ public class CrawlerService {
                     Element dt = dtsIterator.next();
                     Element dd = ddsIterator.next();
 
-                    obj.append(dt.text(), dd.toString());
+                    if(dt.text().equals("가족")){
+                        if(dd.select("a").attr("href") != null || dd.select("a").attr("href").length() !=0){
+                            Elements links = dd.select("a");
+                            JSONObject familyObj = new JSONObject();
+                            for(Element e : links) {
+                                familyObj.append(e.attr("href"), e.text());
+//                                logger.debug("href {}", e.attr("href"));
+//                                logger.debug("name {}", e.text());
+                            }
+                            FamilyVO familyVO = new FamilyVO(familyObj.toString());         // family VO의 실효성
+                            familyId = crawlerDao.setFamilyData(familyVO);
+                        }
+                    }
+                    obj.append(dt.text(), dd.text());
                 }
             }
 
-//            logger.debug("json {}", obj);
+//            logger.debug("json {}", obj.toString());
+//            JSONObject object = new JSONObject(jsonString);
+
+            detailVO.setDetail_os(osNumber);
+            detailVO.setDetail_name(name);
+            detailVO.setDetail_job(job);
+            detailVO.setAge(age);
+            detailVO.setProfile(obj.toString());
+            if(familyId != 0){
+                detailVO.setFamily_seq(familyId);
+            }
+
+            crawlerDao.setDetailData(detailVO);
 
             Elements recordWrap = doc.getElementsByClass("record_wrap");
-            HashMap<String, String> recordMap = new HashMap<String, String>();
 
             if(recordWrap != null || recordWrap.size() != 0){
                 Elements blind = recordWrap.select("div.record");
@@ -224,15 +252,17 @@ public class CrawlerService {
                 Iterator<Element> dtsIterator = dts.iterator();
                 Iterator<Element> ddsIterator = dds.iterator();
 
-                while (ddsIterator.hasNext() && dtsIterator.hasNext()){
+                CareerVO careerVO = new CareerVO(osNumber);
+                while (ddsIterator.hasNext() && dtsIterator.hasNext()) {
                     Element dt = dtsIterator.next();
                     Element dd = ddsIterator.next();
 
-                    recordMap.put(dt.text(), dd.text());
+                    careerVO.setCareer_dt(dt.text());
+                    careerVO.setDescription(dd.text());
+
+                    crawlerDao.setCareerData(careerVO);
                 }
             }
-
-//            logger.debug("map {}", recordMap);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -257,7 +287,7 @@ public class CrawlerService {
 
     public static void main(String args[]){
         CrawlerService crawlerService = new CrawlerService();
-        crawlerService.detailLoadSequence();
+//        crawlerService.detailLoadSequence();
     }
 
 
