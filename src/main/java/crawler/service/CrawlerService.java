@@ -201,7 +201,6 @@ public class CrawlerService {
             Elements dts = profileWrap.select("dl.dsc").select("dt");
             Elements dds = profileWrap.select("dl.dsc").select("dd");
             JSONObject obj = new JSONObject();
-            int familyId = 0;
 
             if((dds != null || dds.size() != 0) && (dts !=null || dts.size() != 0)){
                 Iterator<Element> dtsIterator = dts.iterator();
@@ -219,8 +218,7 @@ public class CrawlerService {
 //                                logger.debug("href {}", e.attr("href"));
 //                                logger.debug("name {}", e.text());
                             }
-                            FamilyVO familyVO = new FamilyVO(familyObj.toString());         // family VO의 실효성
-                            familyId = crawlerDao.setFamilyData(familyVO);
+                            detailVO.setFm_urls(familyObj.toString());
                         }
                     }
                     obj.append(dt.text(), dd.text());
@@ -235,9 +233,6 @@ public class CrawlerService {
             detailVO.setDetail_job(job);
             detailVO.setAge(age);
             detailVO.setProfile(obj.toString());
-            if(familyId != 0){
-                detailVO.setFamily_seq(familyId);
-            }
 
             crawlerDao.setDetailData(detailVO);
 

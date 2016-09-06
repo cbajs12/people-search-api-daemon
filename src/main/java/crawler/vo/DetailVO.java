@@ -2,28 +2,28 @@ package crawler.vo;
 
 public class DetailVO {
     private int detail_seq;
-    private int family_seq;
     private String detail_os;
     private String age;
     private String detail_job;
     private String profile;
     private String detail_name;
+    private String fm_urls;
 
     public DetailVO(){}
 
     public DetailVO(DetailVO vo) {
         this.detail_seq = vo.getDetail_seq();
-        this.family_seq = vo.getFamily_seq();
         this.detail_os = vo.getDetail_os();
         this.age = vo.getAge();
         this.detail_job = vo.getDetail_job();
         this.profile = vo.getProfile();
         this.detail_name = vo.getDetail_name();
+        this.fm_urls = vo.getFm_urls();
     }
 
-    public DetailVO(int id, int family, String os, String age, String job, String profile, String detail_name) {
+    public DetailVO(int id, String fm_urls, String os, String age, String job, String profile, String detail_name) {
         this.detail_seq = id;
-        this.family_seq = family;
+        this.fm_urls = fm_urls;
         this.detail_os = os;
         this.age = age;
         this.detail_job = job;
@@ -37,14 +37,6 @@ public class DetailVO {
 
     public void setDetail_seq(int detail_seq) {
         this.detail_seq = detail_seq;
-    }
-
-    public int getFamily_seq() {
-        return family_seq;
-    }
-
-    public void setFamily_seq(int family_seq) {
-        this.family_seq = family_seq;
     }
 
     public String getDetail_os() {
@@ -85,6 +77,14 @@ public class DetailVO {
 
     public void setDetail_name(String detail_name) {
         this.detail_name = detail_name;
+    }
+
+    public String getFm_urls() {
+        return fm_urls;
+    }
+
+    public void setFm_urls(String fm_urls) {
+        this.fm_urls = fm_urls;
     }
 
     //    public String toString() {

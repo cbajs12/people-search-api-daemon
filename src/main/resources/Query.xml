@@ -6,7 +6,6 @@
     <typeAlias type="crawler.vo.BaseVO" alias="baseVO" />
     <typeAlias type="crawler.vo.CareerVO" alias="careerVO" />
     <typeAlias type="crawler.vo.DetailVO" alias="detailVO" />
-    <typeAlias type="crawler.vo.FamilyVO" alias="familyVO" />
     <typeAlias type="crawler.vo.NameVO" alias="nameVO" />
 
     <select id="getBaseList" resultClass="baseVO">
@@ -47,8 +46,8 @@
 
     <insert id="setDetailData" parameterClass="detailVO">
         /* setDetailData */
-        insert into SEARCHDETAIL(FAMILY_SEQ, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE)
-        VALUES (#family_os#, #detail_os#, #detail_job#, #detail_name#, #age#, #profile#)
+        insert into SEARCHDETAIL(FM_URLS, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE)
+        VALUES (#fm_urls#, #detail_os#, #detail_job#, #detail_name#, #age#, #profile#)
     </insert>
 
     <insert id="setCareerData" parameterClass="careerVO">
