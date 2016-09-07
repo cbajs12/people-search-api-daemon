@@ -55,11 +55,4 @@
         insert into SEARCHCAREER(CAREER_DT, CAREER_OS, DESCRIPTION)
         VALUES (#career_dt#, #career_os#, #description#)
     </insert>
-
-    <!--<update id="updateStatusData" parameterClass="dataVO">-->
-        <!--/*+ updateStatusData */-->
-        <!--UPDATE CRAWLER-->
-        <!--SET RES_KEY = #req_key#, STATUS = #status#-->
-        <!--WHERE CRAWLER_SEQ = #crawler_seq#-->
-    <!--</update>-->
 </sqlMap>

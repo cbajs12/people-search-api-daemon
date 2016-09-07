@@ -2,7 +2,10 @@ package crawler.service;
 
 
 import crawler.dao.CrawlerDao;
-import crawler.vo.*;
+import crawler.vo.BaseVO;
+import crawler.vo.CareerVO;
+import crawler.vo.DetailVO;
+import crawler.vo.NameVO;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,17 +43,13 @@ public class CrawlerService {
         patternDomainName = Pattern.compile(DOMAIN_NAME_PATTERN);
     }
 
-    private CrawlerService(){
+    public CrawlerService(){
         if(System.getProperty("os.name").toLowerCase().contains("mac")){
             System.setProperty("webdriver.chrome.driver", "/Users/jeonjiseong/Git/people-search-api-daemon/excute/chromedriver"); // change path
         }
 //        else if(System.getProperty("os.name").toLowerCase().contains("linux")){
 //            System.setProperty("webdriver.chrome.driver", "/Users/jeonjiseong/Git/people-search-api-daemon/excute/chromedriver");
 //        }
-    }
-
-    public void startService(){
-        baseCrawler();
     }
 
     /*
@@ -89,7 +88,7 @@ public class CrawlerService {
 
             for(int i=0; i<nameVOs.size(); ++i){
                 nameVO = (NameVO)nameVOs.get(i);
-
+                detailLoadSequence(nameVO.getName_os());
             }
 
         } catch (Exception e) {
@@ -167,22 +166,9 @@ public class CrawlerService {
     }
 
     /*
-        Wait until document state is complete using javascript injection
-     */
-    public void waitForLoad(final WebDriver driver){
-        ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver webDriver) {
-                return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
-            }
-        };
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(pageLoadCondition);
-    }
-
-    /*
         Crawling naver-people-search using JSoup and add the data into DB
      */
-    public void detailLoadSequence(String os){//
+    public void detailLoadSequence(String os){
         String osNumber = getOsFromUrl("os");
         DetailVO detailVO = new DetailVO();
 //        String url = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=안성기&os=94590&ie=utf8&key=PeopleService";
@@ -280,10 +266,23 @@ public class CrawlerService {
         return null;
     }
 
-    public static void main(String args[]){
-        CrawlerService crawlerService = new CrawlerService();
-//        crawlerService.detailLoadSequence();
+    /*
+        Wait until document state is complete using javascript injection
+     */
+    public void waitForLoad(final WebDriver driver){
+        ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver webDriver) {
+                return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
+            }
+        };
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(pageLoadCondition);
     }
+
+//    public static void main(String args[]){
+//        CrawlerService crawlerService = new CrawlerService();
+//        crawlerService.detailLoadSequence();
+//    }
 
 
 
