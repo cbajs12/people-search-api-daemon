@@ -14,7 +14,8 @@
         , BASE_NAME as base_name
         , BASE_CODE as base_code
         FROM SEARCHBASE
-        WHERE BASE_CODE != 'CR002'
+        WHERE BASE_CODE != 'CR002' OR BASE_CODE != 'CR004'
+--         AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
     <insert id="setBaseData" parameterClass="baseVO">
@@ -41,7 +42,7 @@
         , Name_CODE as name_code
         , Name_OS as name_os
         FROM SEARCHNAME
-        WHERE NAME_CODE != 'CR002'
+        WHERE NAME_CODE != 'CR002' OR NAME_CODE != 'CR004'
     </select>
 
     <insert id="setDetailData" parameterClass="detailVO">

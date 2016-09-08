@@ -36,7 +36,6 @@ public class ConfigNew {
 
     private void init() {
         try {
-
             daemonProps =  propertiesName;
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -53,7 +52,7 @@ public class ConfigNew {
     }
 
     public static int getBatchInterval() {
-        return CommonUtils.nvl(getProperties(daemonProps, "daemon.batch.interval"),60);
+        return CommonUtils.nvl(getProperties(daemonProps, "daemon.batch.interval"),12);
     }
 
     public static int getBatchThread() {

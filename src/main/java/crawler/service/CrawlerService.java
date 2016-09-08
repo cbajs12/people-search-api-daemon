@@ -27,14 +27,11 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CrawlerService {
     private static Logger logger = LoggerFactory.getLogger(CrawlerService.class);
-    public static boolean 	threadFlag 	=  true;
     private static Pattern patternDomainName;
-    private Matcher matcher;
     private static final String DOMAIN_NAME_PATTERN = "([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}";
     private CrawlerDao crawlerDao = new CrawlerDao();
     private ChromeDriver driver;
@@ -62,16 +59,20 @@ public class CrawlerService {
 
         try {
             List baseVOs = crawlerDao.getBaseList();
-            logger.debug("baseVOs {}", baseVOs);
-            BaseVO baseVO;
-            String url = "http://people.search.naver.com/search.naver?where=nexearch&ie=utf8&query=";
-            driver.get(url);
-            for(int i=0; i<baseVOs.size(); ++i){
-                baseVO = (BaseVO)baseVOs.get(i);
-                baseLoadSequence(baseVO.getBase_name());
+//            logger.debug("baseVOs {}", baseVOs);
+
+            if(baseVOs != null || baseVOs.size() != 0) {
+                BaseVO baseVO;
+                String url = "http://people.search.naver.com/search.naver?where=nexearch&ie=utf8&query=";
+                driver.get(url);
+                for (int i = 0; i < baseVOs.size(); ++i) {
+                    baseVO = (BaseVO) baseVOs.get(i);
+                    baseLoadSequence(baseVO.getBase_name());
+                    Thread.sleep(1000);
+                }
             }
         } catch (Exception e) {
-            logger.debug("baseCrawler SQL ERROR");
+            logger.debug("baseCrawler ERROR");
             e.printStackTrace();
         }
         driver.close();
@@ -83,16 +84,19 @@ public class CrawlerService {
     public void detailCrawler(){
         try {
             List nameVOs = crawlerDao.getNameList();
-            logger.debug("nameVOs {}", nameVOs);
-            NameVO nameVO;
+//            logger.debug("nameVOs {}", nameVOs);
 
-            for(int i=0; i<nameVOs.size(); ++i){
-                nameVO = (NameVO)nameVOs.get(i);
-                detailLoadSequence(nameVO.getName_os());
+            if(nameVOs != null || nameVOs.size() != 0) {
+                NameVO nameVO;
+                for (int i = 0; i < nameVOs.size(); ++i) {
+                    nameVO = (NameVO) nameVOs.get(i);
+                    detailLoadSequence(nameVO.getName_os());
+                    Thread.sleep(1000);
+                }
             }
 
         } catch (Exception e) {
-            logger.debug("detailCrawler SQL ERROR");
+            logger.debug("detailCrawler ERROR");
             e.printStackTrace();
         }
     }
@@ -146,7 +150,7 @@ public class CrawlerService {
                 results = driver.findElements(By.cssSelector("div.who"));
                 for (int i = 0; i < results.size(); ++i) {
                     data = results.get(i).findElement(By.xpath(".//a"));
-                    nameVO.setName_os(data.getAttribute("href"));           // 중복 데이터에 대한 처리 필요
+                    nameVO.setName_os(data.getAttribute("href"));
                     crawlerDao.setNameData(nameVO);
 //                logger.debug("data {}", data.getAttribute("href"));
                 }
@@ -199,10 +203,15 @@ public class CrawlerService {
                         if(dd.select("a").attr("href") != null || dd.select("a").attr("href").length() !=0){
                             Elements links = dd.select("a");
                             JSONObject familyObj = new JSONObject();
+                            NameVO nameVO = new NameVO("CR001");
                             for(Element e : links) {
-                                familyObj.append(e.attr("href"), e.text());
 //                                logger.debug("href {}", e.attr("href"));
 //                                logger.debug("name {}", e.text());
+                                familyObj.append(e.attr("href"), e.text());
+
+                                nameVO.setName_os(e.attr("href"));
+                                nameVO.setName_names(e.text());
+                                crawlerDao.setNameData(nameVO);
                             }
                             detailVO.setFm_urls(familyObj.toString());
                         }
@@ -283,7 +292,4 @@ public class CrawlerService {
 //        CrawlerService crawlerService = new CrawlerService();
 //        crawlerService.detailLoadSequence();
 //    }
-
-
-
 }

@@ -27,6 +27,10 @@ public class NameVO {
         this.name_code = flag;
     }
 
+    public NameVO(String flag){
+        this.name_code = flag;
+    }
+
     public int getName_seq() {
         return name_seq;
     }

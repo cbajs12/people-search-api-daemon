@@ -40,7 +40,8 @@ public class ThreadManager{
         getServiceInstance();
 
         synchronized (getServiceInstance()) {
-            scheduler.scheduleAtFixedRate(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS);
+//            scheduler.scheduleAtFixedRate(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS); //scheduleWithFixedDelay
+            scheduler.scheduleWithFixedDelay(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.HOURS);
         }
 
         taskStatus = 1;
@@ -99,10 +100,10 @@ public class ThreadManager{
 //    }
 }
 
-class MainThread extends Thread{
+class MainThread implements Runnable{
     private static Logger logger = LoggerFactory.getLogger(MainThread.class);
 
-    public MainThread(){ }
+    public MainThread(){}
 
     public void run() {
         try {
@@ -136,19 +137,17 @@ class MainThread extends Thread{
 class BaseThread extends Thread{
     private static Logger logger = LoggerFactory.getLogger(BaseThread.class);
     private CrawlerService crawlerService = new CrawlerService();
-//    private CrawlerDao crawlerDao = new CrawlerDao();
-    public BaseThread(){}
 
-//    public BaseThread(DataVO vo){dataVO = vo;}
+    public BaseThread(){}
 
     public void run() {
         try {
             crawlerService.baseCrawler();
 
-            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
+//            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
 //			Thread.sleep(5000L);
         } catch (Exception e) {
             Thread.currentThread().interrupt();
@@ -161,19 +160,17 @@ class BaseThread extends Thread{
 class DetailThread extends Thread{
     private static Logger logger = LoggerFactory.getLogger(DetailThread.class);
     private CrawlerService crawlerService = new CrawlerService();
-//    private CrawlerDao crawlerDao = new CrawlerDao(); // dao에서 데이터 가져오고 cr004로 바꾼후, sync 사용해야함
-    public DetailThread(){}
 
-//    public DetailThread(DataVO vo){dataVO = vo;}
+    public DetailThread(){}
 
     public void run() {
         try {
             crawlerService.detailCrawler();
 
-            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
+//            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
+//            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
 //			Thread.sleep(5000L);
         } catch (Exception e) {
             Thread.currentThread().interrupt();

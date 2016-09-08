@@ -24,7 +24,7 @@ public class CrawlerDao {
             baseVOList = sqlMap.queryForList("daemon.getBaseList", baseVO);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.debug("List BASE DATA ERROR", e);
         }
         return baseVOList;
     }
@@ -67,7 +67,7 @@ public class CrawlerDao {
             nameVOList = sqlMap.queryForList("daemon.getNameList", nameVO);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.debug("List Name DATA ERROR", e);
         }
         return nameVOList;
     }
