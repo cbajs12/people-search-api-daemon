@@ -100,4 +100,35 @@ public class CrawlerDao {
         return check;
     }
 
+    /*
+        Update Base code of Base Table
+     */
+    public int updateBaseCode(BaseVO baseVO) throws InterruptedException{
+        int result = 0;
+        try {
+            result = (Integer)sqlMap.update("daemon.updateBaseCode", baseVO);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            logger.debug("Update Base Code ERROR", e);
+        }
+
+        return result;
+    }
+
+    /*
+        Update Name code of Name Table
+     */
+    public int updateNameCode(NameVO nameVO) throws InterruptedException{
+        int result = 0;
+        try {
+            result = (Integer)sqlMap.update("daemon.updateNameCode", nameVO);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            logger.debug("Update Name Code ERROR", e);
+        }
+
+        return result;
+    }
+
+
 }

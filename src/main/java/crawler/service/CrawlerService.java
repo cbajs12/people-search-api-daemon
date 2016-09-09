@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
@@ -67,13 +66,13 @@ public class CrawlerService {
                 driver.get(url);
                 for (int i = 0; i < baseVOs.size(); ++i) {
                     baseVO = (BaseVO) baseVOs.get(i);
-                    baseLoadSequence(baseVO.getBase_name());
+                    baseLoadSequence(baseVO);
                     Thread.sleep(1000);
                 }
             }
         } catch (Exception e) {
             logger.debug("baseCrawler ERROR");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         driver.close();
     }
@@ -90,14 +89,14 @@ public class CrawlerService {
                 NameVO nameVO;
                 for (int i = 0; i < nameVOs.size(); ++i) {
                     nameVO = (NameVO) nameVOs.get(i);
-                    detailLoadSequence(nameVO.getName_os());
+                    detailLoadSequence(nameVO);
                     Thread.sleep(1000);
                 }
             }
 
         } catch (Exception e) {
             logger.debug("detailCrawler ERROR");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -124,21 +123,20 @@ public class CrawlerService {
                 }
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.debug("Init SQL Error", e);
+//            e.printStackTrace();
         }
     }
 
     /*
         Crawling naver-people-search using selenium browser and add the data into DB
      */
-    public void baseLoadSequence(String name){
-        NameVO nameVO = new NameVO(name, "CR001");
+    public void baseLoadSequence(BaseVO baseVO){
+        NameVO nameVO = new NameVO(baseVO.getBase_name(), "CR001");
         WebElement query = driver.findElement(By.id("nx_query"));
-        query.sendKeys(name);
+        query.sendKeys(baseVO.getBase_name());
         query.submit();
 
         List<WebElement> results;
@@ -155,7 +153,7 @@ public class CrawlerService {
 //                logger.debug("data {}", data.getAttribute("href"));
                 }
             }catch (InterruptedException e){
-                logger.debug("BaseLoad SQL Error", e);
+                logger.debug("Insert Name SQL Error", e);
             }
 
             try {
@@ -167,19 +165,27 @@ public class CrawlerService {
                 paging = null;
             }
         }
+
+        try {
+            baseVO.setBase_code("CR002");
+            crawlerDao.updateBaseCode(baseVO);
+        } catch (InterruptedException e) {
+            logger.debug("Update Base SQL Error", e);
+//            e.printStackTrace();
+        }
     }
 
     /*
         Crawling naver-people-search using JSoup and add the data into DB
      */
-    public void detailLoadSequence(String os){
+    public void detailLoadSequence(NameVO nameVO){
         String osNumber = getOsFromUrl("os");
         DetailVO detailVO = new DetailVO();
 //        String url = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=안성기&os=94590&ie=utf8&key=PeopleService";
 
         try{
             Document doc = Jsoup
-                    .connect(os)
+                    .connect(nameVO.getName_os())
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
                     .timeout(30000).get();
 
@@ -203,15 +209,15 @@ public class CrawlerService {
                         if(dd.select("a").attr("href") != null || dd.select("a").attr("href").length() !=0){
                             Elements links = dd.select("a");
                             JSONObject familyObj = new JSONObject();
-                            NameVO nameVO = new NameVO("CR001");
+                            NameVO tempNameVO = new NameVO("CR001");
                             for(Element e : links) {
 //                                logger.debug("href {}", e.attr("href"));
 //                                logger.debug("name {}", e.text());
                                 familyObj.append(e.attr("href"), e.text());
 
-                                nameVO.setName_os(e.attr("href"));
-                                nameVO.setName_names(e.text());
-                                crawlerDao.setNameData(nameVO);
+                                tempNameVO.setName_os(e.attr("href"));
+                                tempNameVO.setName_names(e.text());
+                                crawlerDao.setNameData(tempNameVO);
                             }
                             detailVO.setFm_urls(familyObj.toString());
                         }
@@ -254,8 +260,11 @@ public class CrawlerService {
                 }
             }
 
+            nameVO.setName_code("CR002");
+            crawlerDao.updateNameCode(nameVO);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.debug("Insert Detail SQL Error", e);
+//            e.printStackTrace();
         }
     }
 

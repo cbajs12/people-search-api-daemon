@@ -18,6 +18,13 @@
 --         AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
+    <update id="updateBaseCode" parameterClass="baseVO">
+        /*+ updateBaseData */
+        UPDATE SEARCHBASE
+        SET BASE_CODE = #base_code#
+        WHERE BASE_SEQ = #base_seq#
+    </update>
+
     <insert id="setBaseData" parameterClass="baseVO">
         /* setBaseData */
         insert into SEARCHBASE(BASE_NAME, BASE_CODE)
@@ -37,13 +44,20 @@
 
     <select id="getNameList" resultClass="nameVO">
         /*+ getNameList */
-        SELECT Name_SEQ as name_seq
+        SELECT NAME_SEQ as name_seq
         , NAME_NAMES as name_names
-        , Name_CODE as name_code
-        , Name_OS as name_os
+        , NAME_CODE as name_code
+        , NAME_OS as name_os
         FROM SEARCHNAME
         WHERE NAME_CODE != 'CR002' OR NAME_CODE != 'CR004'
     </select>
+
+    <update id="updateNameCode" parameterClass="nameVO">
+        /*+ updateNameData */
+        UPDATE SEARCHNAME
+        SET NAME_CODE = #name_code#
+        WHERE NAME_SEQ = #name_seq#
+    </update>
 
     <insert id="setDetailData" parameterClass="detailVO">
         /* setDetailData */
@@ -56,4 +70,6 @@
         insert into SEARCHCAREER(CAREER_DT, CAREER_OS, DESCRIPTION)
         VALUES (#career_dt#, #career_os#, #description#)
     </insert>
+
+
 </sqlMap>

@@ -10,7 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/*
+    ThreadPool for managing Thread periodically
+*/
 public class ThreadManager{
     public static ThreadManager instance;
     public static ScheduledExecutorService scheduler;
@@ -100,6 +102,9 @@ public class ThreadManager{
 //    }
 }
 
+/*
+    Thread for managing BaseThread and DetailThread
+*/
 class MainThread implements Runnable{
     private static Logger logger = LoggerFactory.getLogger(MainThread.class);
 
@@ -134,6 +139,9 @@ class MainThread implements Runnable{
     }
 }
 
+/*
+    Thread for crawling using selenium
+*/
 class BaseThread extends Thread{
     private static Logger logger = LoggerFactory.getLogger(BaseThread.class);
     private CrawlerService crawlerService = new CrawlerService();
@@ -157,6 +165,9 @@ class BaseThread extends Thread{
     }
 }
 
+/*
+    Thread for crawling using JSoup
+*/
 class DetailThread extends Thread{
     private static Logger logger = LoggerFactory.getLogger(DetailThread.class);
     private CrawlerService crawlerService = new CrawlerService();
