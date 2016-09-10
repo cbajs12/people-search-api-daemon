@@ -10,7 +10,8 @@
 *.iml
 .idea
 apache-tomcat-7.0.70
-excute
+excute/sample
+excute/chromedriver
 libraries
 target
 logs
