@@ -40,12 +40,14 @@ public class CrawlerService {
     }
 
     public CrawlerService(){
+        String path = CrawlerService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+//        logger.debug(path+"driver/chromedriver");
+
         if(System.getProperty("os.name").toLowerCase().contains("mac")){
-            System.setProperty("webdriver.chrome.driver", "/Users/jeonjiseong/Git/people-search-api-daemon/excute/chromedriver"); // change path
+            System.setProperty("webdriver.chrome.driver", path+"driver/chromedriver");
+        } else if(System.getProperty("os.name").toLowerCase().contains("linux")){
+            System.setProperty("webdriver.chrome.driver", path+"driver/chromedriver");
         }
-//        else if(System.getProperty("os.name").toLowerCase().contains("linux")){
-//            System.setProperty("webdriver.chrome.driver", "/Users/jeonjiseong/Git/people-search-api-daemon/excute/chromedriver");
-//        }
     }
 
     /*
@@ -299,6 +301,5 @@ public class CrawlerService {
 
 //    public static void main(String args[]){
 //        CrawlerService crawlerService = new CrawlerService();
-//        crawlerService.detailLoadSequence();
 //    }
 }

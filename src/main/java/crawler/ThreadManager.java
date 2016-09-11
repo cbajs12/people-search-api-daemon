@@ -4,7 +4,6 @@ package crawler;
 import crawler.service.CrawlerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.ConfigNew;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -43,7 +42,8 @@ public class ThreadManager{
 
         synchronized (getServiceInstance()) {
 //            scheduler.scheduleAtFixedRate(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS); //scheduleWithFixedDelay
-            scheduler.scheduleWithFixedDelay(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.HOURS);
+//            scheduler.scheduleWithFixedDelay(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.HOURS);
+            scheduler.scheduleWithFixedDelay(new MainThread(), 1, 1, TimeUnit.MINUTES);
         }
 
         taskStatus = 1;

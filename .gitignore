@@ -11,10 +11,10 @@
 .idea
 apache-tomcat-7.0.70
 excute/sample
-excute/chromedriver
 libraries
 target
 logs
+driver
 .DS_Store
 
 # Files #

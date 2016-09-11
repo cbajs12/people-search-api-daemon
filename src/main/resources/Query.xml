@@ -14,8 +14,8 @@
         , BASE_NAME as base_name
         , BASE_CODE as base_code
         FROM SEARCHBASE
-        WHERE BASE_CODE != 'CR002' OR BASE_CODE != 'CR004'
---         AND ROWNUM <![CDATA[<= ]]> 10
+        WHERE (BASE_CODE != 'CR002' OR BASE_CODE != 'CR004')
+        AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
     <update id="updateBaseCode" parameterClass="baseVO">
@@ -49,7 +49,8 @@
         , NAME_CODE as name_code
         , NAME_OS as name_os
         FROM SEARCHNAME
-        WHERE NAME_CODE != 'CR002' OR NAME_CODE != 'CR004'
+        WHERE (NAME_CODE != 'CR002' OR NAME_CODE != 'CR004')
+        AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
     <update id="updateNameCode" parameterClass="nameVO">
