@@ -22,22 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 public class CrawlerService {
     private static Logger logger = LoggerFactory.getLogger(CrawlerService.class);
-    private static Pattern patternDomainName;
-    private static final String DOMAIN_NAME_PATTERN = "([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,6}";
     private CrawlerDao crawlerDao = new CrawlerDao();
     private ChromeDriver driver;
-
-    static {
-        patternDomainName = Pattern.compile(DOMAIN_NAME_PATTERN);
-    }
 
     public CrawlerService(){
         String path = CrawlerService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -58,24 +52,30 @@ public class CrawlerService {
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
 
+        List baseVOs = null;
         try {
-            List baseVOs = crawlerDao.getBaseList();
-//            logger.debug("baseVOs {}", baseVOs);
+            baseVOs = crawlerDao.getBaseList();
+        } catch (InterruptedException e) {
+            logger.debug("baseCrawler Get Base List ERROR");
+        }
+//        logger.debug("baseVOS {}",baseVOs);
 
-            if(baseVOs != null || baseVOs.size() != 0) {
-                BaseVO baseVO;
-                String url = "http://people.search.naver.com/search.naver?where=nexearch&ie=utf8&query=";
-                driver.get(url);
+        if(baseVOs != null || baseVOs.size() != 0) {
+            BaseVO baseVO;
+            String url = "http://people.search.naver.com/search.naver?where=nexearch&ie=utf8&query=";
+            driver.get(url);
+
+            try {
                 for (int i = 0; i < baseVOs.size(); ++i) {
                     baseVO = (BaseVO) baseVOs.get(i);
                     baseLoadSequence(baseVO);
                     Thread.sleep(1000);
                 }
+            } catch (InterruptedException e) {
+                logger.debug("baseCrawler Thread Sleep ERROR");
             }
-        } catch (Exception e) {
-            logger.debug("baseCrawler ERROR");
-//            e.printStackTrace();
         }
+        logger.debug("baseCrawler Finished");
         driver.close();
     }
 
@@ -83,23 +83,26 @@ public class CrawlerService {
         Crawling naver-people-search based on Name Table data
      */
     public void detailCrawler(){
+        List nameVOs = null;
         try {
-            List nameVOs = crawlerDao.getNameList();
-//            logger.debug("nameVOs {}", nameVOs);
+            nameVOs = crawlerDao.getNameList();
+        } catch (InterruptedException e) {
+            logger.debug("detailCrawler Get Name List ERROR");
+        }
 
-            if(nameVOs != null || nameVOs.size() != 0) {
+        if(nameVOs != null || nameVOs.size() != 0) {
+            try {
                 NameVO nameVO;
                 for (int i = 0; i < nameVOs.size(); ++i) {
                     nameVO = (NameVO) nameVOs.get(i);
                     detailLoadSequence(nameVO);
                     Thread.sleep(1000);
                 }
+            } catch (InterruptedException e) {
+                logger.debug("detailCrawler Thread Sleep ERROR");
             }
-
-        } catch (Exception e) {
-            logger.debug("detailCrawler ERROR");
-//            e.printStackTrace();
         }
+        logger.debug("detailCrawler Finished");
     }
 
     public void activityCrawler(){
@@ -138,6 +141,7 @@ public class CrawlerService {
     public void baseLoadSequence(BaseVO baseVO){
         NameVO nameVO = new NameVO(baseVO.getBase_name(), "CR001");
         WebElement query = driver.findElement(By.id("nx_query"));
+        query.clear();
         query.sendKeys(baseVO.getBase_name());
         query.submit();
 
@@ -163,7 +167,8 @@ public class CrawlerService {
                 driver.findElement(By.cssSelector("a.next")).click();
 //                waitForLoad(driver);
                 Thread.sleep(1000);
-            }catch (Exception e){
+            } catch (Exception e) {
+                logger.debug("baseLoad Paging Error", e);
                 paging = null;
             }
         }
@@ -173,7 +178,6 @@ public class CrawlerService {
             crawlerDao.updateBaseCode(baseVO);
         } catch (InterruptedException e) {
             logger.debug("Update Base SQL Error", e);
-//            e.printStackTrace();
         }
     }
 
@@ -181,93 +185,112 @@ public class CrawlerService {
         Crawling naver-people-search using JSoup and add the data into DB
      */
     public void detailLoadSequence(NameVO nameVO){
-        String osNumber = getOsFromUrl("os");
+        String osNumber = getOsFromUrl(nameVO.getName_os());
         DetailVO detailVO = new DetailVO();
-//        String url = "http://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=안성기&os=94590&ie=utf8&key=PeopleService";
 
-        try{
-            Document doc = Jsoup
+        Document doc = null;
+        try {
+             doc = Jsoup
                     .connect(nameVO.getName_os())
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.120 Safari/535.2")
                     .timeout(30000).get();
+        }catch (IOException e) {
+            logger.debug("Jsoup Document Error", e);
+            return;
+        }
 
-            Elements profileWrap = doc.getElementsByClass("profile_wrap");
+        Elements profileWrap = doc.getElementsByClass("profile_wrap");
 
-            String name = profileWrap.select("dt.name").text();
-            String job = profileWrap.select("dt.sub").text();
-            String age = profileWrap.select("dd.dft").text();
-            Elements dts = profileWrap.select("dl.dsc").select("dt");
-            Elements dds = profileWrap.select("dl.dsc").select("dd");
-            JSONObject obj = new JSONObject();
+        String name = profileWrap.select("dt.name").text();
+        String job = profileWrap.select("dd.sub").text();
+        String age = profileWrap.select("dd.dft").text();
+        Elements dts = profileWrap.select("dl.dsc").select("dt");
+        Elements dds = profileWrap.select("dl.dsc").select("dd");
+        JSONObject obj = new JSONObject();
 
-            if((dds != null || dds.size() != 0) && (dts !=null || dts.size() != 0)){
-                Iterator<Element> dtsIterator = dts.iterator();
-                Iterator<Element> ddsIterator = dds.iterator();
-                while (ddsIterator.hasNext() && dtsIterator.hasNext()){
-                    Element dt = dtsIterator.next();
-                    Element dd = ddsIterator.next();
+        if((dds != null || dds.size() != 0) && (dts !=null || dts.size() != 0)){
+            Iterator<Element> dtsIterator = dts.iterator();
+            Iterator<Element> ddsIterator = dds.iterator();
+            while (ddsIterator.hasNext() && dtsIterator.hasNext()){
+                Element dt = dtsIterator.next();
+                Element dd = ddsIterator.next();
 
-                    if(dt.text().equals("가족")){
-                        if(dd.select("a").attr("href") != null || dd.select("a").attr("href").length() !=0){
-                            Elements links = dd.select("a");
-                            JSONObject familyObj = new JSONObject();
-                            NameVO tempNameVO = new NameVO("CR001");
-                            for(Element e : links) {
+                if(dt.text().equals("가족")){
+                    if(dd.select("a").attr("href") != null || dd.select("a").attr("href").length() !=0){
+                        Elements links = dd.select("a");
+                        JSONObject familyObj = new JSONObject();
+                        NameVO tempNameVO = new NameVO("CR001");
+
+                        for (Element e : links) {
 //                                logger.debug("href {}", e.attr("href"));
 //                                logger.debug("name {}", e.text());
-                                familyObj.append(e.attr("href"), e.text());
+                            familyObj.append(e.attr("href"), e.text());
 
-                                tempNameVO.setName_os(e.attr("href"));
-                                tempNameVO.setName_names(e.text());
+                            tempNameVO.setName_os(e.attr("href"));
+                            tempNameVO.setName_names(e.text());
+                            try {
                                 crawlerDao.setNameData(tempNameVO);
+                            } catch (InterruptedException e1) {
+                                logger.debug("detailLoad SET NAME Error", e);
                             }
-                            detailVO.setFm_urls(familyObj.toString());
                         }
+                        detailVO.setFm_urls(familyObj.toString());
                     }
-                    obj.append(dt.text(), dd.text());
                 }
+                obj.append(dt.text(), dd.text());
             }
+        }
 
 //            logger.debug("json {}", obj.toString());
 //            JSONObject object = new JSONObject(jsonString);
 
-            detailVO.setDetail_os(osNumber);
-            detailVO.setDetail_name(name);
-            detailVO.setDetail_job(job);
-            detailVO.setAge(age);
-            detailVO.setProfile(obj.toString());
+        detailVO.setDetail_os(osNumber);
+        detailVO.setDetail_name(name);
+        detailVO.setDetail_job(job);
+        detailVO.setAge(age);
+        detailVO.setProfile(obj.toString());
 
+        try {
             crawlerDao.setDetailData(detailVO);
+        } catch (InterruptedException e) {
+            logger.debug("detailLoad SET DETAIL Error", e);
+            return;
+        }
 
-            Elements recordWrap = doc.getElementsByClass("record_wrap");
+        Elements recordWrap = doc.getElementsByClass("record_wrap");
 
-            if(recordWrap != null || recordWrap.size() != 0){
-                Elements blind = recordWrap.select("div.record");
+        if(recordWrap != null || recordWrap.size() != 0){
+            Elements blind = recordWrap.select("div.record");
 
-                dts = blind.select("dt");
-                dds = blind.select("dd");
+            dts = blind.select("dt");
+            dds = blind.select("dd");
 
-                Iterator<Element> dtsIterator = dts.iterator();
-                Iterator<Element> ddsIterator = dds.iterator();
+            Iterator<Element> dtsIterator = dts.iterator();
+            Iterator<Element> ddsIterator = dds.iterator();
 
-                CareerVO careerVO = new CareerVO(osNumber);
-                while (ddsIterator.hasNext() && dtsIterator.hasNext()) {
-                    Element dt = dtsIterator.next();
-                    Element dd = ddsIterator.next();
+            CareerVO careerVO = new CareerVO(osNumber);
+            while (ddsIterator.hasNext() && dtsIterator.hasNext()) {
+                Element dt = dtsIterator.next();
+                Element dd = ddsIterator.next();
 
-                    careerVO.setCareer_dt(dt.text());
-                    careerVO.setDescription(dd.text());
+                careerVO.setCareer_dt(dt.text());
+                careerVO.setDescription(dd.text());
 
+                try {
                     crawlerDao.setCareerData(careerVO);
+                } catch (InterruptedException e) {
+                    logger.debug("detailLoad SET Career Error {}", e);
                 }
             }
-
-            nameVO.setName_code("CR002");
-            crawlerDao.updateNameCode(nameVO);
-        }catch (Exception e){
-            logger.debug("Insert Detail SQL Error", e);
-//            e.printStackTrace();
         }
+
+        nameVO.setName_code("CR002");
+        try {
+            crawlerDao.updateNameCode(nameVO);
+        } catch (InterruptedException e) {
+            logger.debug("detailLoad Update Name code Error", e);
+        }
+
     }
 
     /*
@@ -301,5 +324,6 @@ public class CrawlerService {
 
 //    public static void main(String args[]){
 //        CrawlerService crawlerService = new CrawlerService();
+//        crawlerService.baseCrawler();
 //    }
 }

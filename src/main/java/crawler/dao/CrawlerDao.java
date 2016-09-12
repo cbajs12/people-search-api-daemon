@@ -126,7 +126,6 @@ public class CrawlerDao {
             // TODO Auto-generated catch block
             logger.debug("Update Name Code ERROR", e);
         }
-
         return result;
     }
 

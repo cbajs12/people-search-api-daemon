@@ -43,7 +43,7 @@ public class ThreadManager{
         synchronized (getServiceInstance()) {
 //            scheduler.scheduleAtFixedRate(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.SECONDS); //scheduleWithFixedDelay
 //            scheduler.scheduleWithFixedDelay(new MainThread(), 1, ConfigNew.getBatchInterval(), TimeUnit.HOURS);
-            scheduler.scheduleWithFixedDelay(new MainThread(), 1, 1, TimeUnit.MINUTES);
+            scheduler.scheduleWithFixedDelay(new MainThread(), 1, 60, TimeUnit.SECONDS);
         }
 
         taskStatus = 1;
@@ -118,6 +118,11 @@ class MainThread implements Runnable{
             baseThread.start();
             detailThread.start();
 
+            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
+            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
+            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
+            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
+
             try{
                 baseThread.join();
                 detailThread.join();
@@ -125,10 +130,7 @@ class MainThread implements Runnable{
                 e.printStackTrace();
             }
 
-            logger.debug("Free  : "+ Runtime.getRuntime().freeMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Max   : "+ Runtime.getRuntime().maxMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Total : "+ Runtime.getRuntime().totalMemory() / (1024 * 1024) + " MB ");
-            logger.debug("Use   : "+ (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " MB ");
+
 
 //				Thread.sleep(5000L);
         } catch (Exception e) {

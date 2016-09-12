@@ -14,7 +14,7 @@
         , BASE_NAME as base_name
         , BASE_CODE as base_code
         FROM SEARCHBASE
-        WHERE (BASE_CODE != 'CR002' OR BASE_CODE != 'CR004')
+        WHERE (BASE_CODE = 'CR001')
         AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
@@ -49,7 +49,7 @@
         , NAME_CODE as name_code
         , NAME_OS as name_os
         FROM SEARCHNAME
-        WHERE (NAME_CODE != 'CR002' OR NAME_CODE != 'CR004')
+        WHERE (NAME_CODE = 'CR001')
         AND ROWNUM <![CDATA[<= ]]> 10
     </select>
 
@@ -63,13 +63,13 @@
     <insert id="setDetailData" parameterClass="detailVO">
         /* setDetailData */
         insert into SEARCHDETAIL(FM_URLS, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE)
-        VALUES (#fm_urls#, #detail_os#, #detail_job#, #detail_name#, #age#, #profile#)
+        VALUES (#fm_urls:CLOB#, #detail_os#, #detail_job:VARCHAR#, #detail_name:VARCHAR#, #age:VARCHAR#, #profile:CLOB#)
     </insert>
 
     <insert id="setCareerData" parameterClass="careerVO">
         /* setCareerData */
         insert into SEARCHCAREER(CAREER_DT, CAREER_OS, DESCRIPTION)
-        VALUES (#career_dt#, #career_os#, #description#)
+        VALUES (#career_dt:VARCHAR#, #career_os#, #description:CLOB#)
     </insert>
 
 
