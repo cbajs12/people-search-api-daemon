@@ -27,12 +27,12 @@ then
 
              if [ $? -eq 0 ]; then
                 #echo " ${JAR} $PID  STOP Done."
-                echo "FilesetManager Deamon STOP Done."
+                echo "PeopleSearchCrawler Deamon STOP Done."
              fi
           fi
      done
 
-     ${JAVA_HOME}/bin/java -Xms256m -Xmx512m -Dpeope-search-api-daemon=${JAR}  -cp ${JAR} Start >> ${LOG_DIR}/crawler.$(date +%y-%m-%d).log 2>&1 &
+     ${JAVA_HOME}/bin/java -Xms256m -Xmx512m -Dpeope-search-api-daemon=${JAR}  -cp /home/daemon/people-search-api-daemon.jar Start >> ${LOG_DIR}/crawler.$(date +%y-%m-%d).log 2>&1 &
      echo "PeopleSearchCrawler Deamon Started"
 
   else
