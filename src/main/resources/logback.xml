@@ -16,25 +16,19 @@
         </encoder>
     </appender>
 
+    <!--<appender name="file" class="ch.qos.logback.core.FileAppender">-->
+        <!--<file>/home/ubuntu/peope-search-api-daemon/logs/file.log</file>-->
+        <!--<encoder>-->
+            <!--<pattern>-->
+                <!--▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n-->
+                <!--&lt;!&ndash; [%method:%line] : 어떤 메소드에 어떤 라인에서 찍혔는지 %msg%n : 찍고 싶은 로그&ndash;&gt;-->
+            <!--</pattern>-->
+        <!--</encoder>-->
 
-<!--&lt;!&ndash; file로 log 남기기 &ndash;&gt;-->
-<!--<appender name="console" class="ch.qos.logback.core.ConsoleAppender">-->
-    <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
-        <!--<pattern>-->
-            <!--▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n-->
-        <!--</pattern>-->
-    <!--</encoder>-->
-<!--</appender>-->
-
-<!--<appender name="file" class="ch.qos.logback.core.FileAppender">-->
-    <!--<file>d:\testFile.log</file>-->
-    <!--<encoder>-->
-        <!--<pattern>-->
-            <!--▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n-->
-            <!--&lt;!&ndash; [%method:%line] : 어떤 메소드에 어떤 라인에서 찍혔는지 %msg%n : 찍고 싶은 로그&ndash;&gt;-->
-        <!--</pattern>-->
-    <!--</encoder>-->
-<!--</appender>-->
+        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<MaxFileSize>2MB</MaxFileSize>-->
+        <!--</triggeringPolicy>-->
+    <!--</appender>-->
 
 <!--&lt;!&ndash; class만 따로 지정해서 이 클래스만 로그를 따로 관리할 수 있다. LoginInterceptor class 파일만 따로 로그 관리 &ndash;&gt;-->
 <!--<appender name="fileForLoginInterceptor" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
@@ -60,7 +54,7 @@
 
     <root level="info">
         <appender-ref ref="console" />
-        <!--<appender-ref ref="file" />-->
+        <appender-ref ref="file" />
     </root>
 
 </configuration>

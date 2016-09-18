@@ -15,6 +15,7 @@ libraries
 target
 logs
 driver
+out
 .DS_Store
 
 # Files #

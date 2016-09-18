@@ -34,13 +34,10 @@ public class CrawlerService {
     private ChromeDriver driver;
 
     public CrawlerService(){
-        String path = CrawlerService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-//        logger.debug(path+"driver/chromedriver");
-
         if(System.getProperty("os.name").toLowerCase().contains("mac")){
-            System.setProperty("webdriver.chrome.driver", path+"driver/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/Users/jeonjiseong/Git/people-search-api-daemon/driver/chromedriver");
         } else if(System.getProperty("os.name").toLowerCase().contains("linux")){
-            System.setProperty("webdriver.chrome.driver", path+"driver/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/home/daemon/chromedriver");
         }
     }
 

@@ -1,5 +1,3 @@
-package base;
-
 import crawler.ThreadManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
