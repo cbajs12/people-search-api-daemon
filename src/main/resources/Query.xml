@@ -71,8 +71,8 @@
 
     <insert id="setDetailData" parameterClass="detailVO">
         /* setDetailData */
-        insert into SEARCHDETAIL(FM_URLS, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE, REG_DT)
-        VALUES (#fm_urls:CLOB#, #detail_os#, #detail_job:VARCHAR#, #detail_name:VARCHAR#, #age:VARCHAR#, #profile:CLOB#, SYSDATE)
+        insert into SEARCHDETAIL(FM_URLS, DETAIL_OS, DETAIL_JOB, DETAIL_NAME, AGE, PROFILE)
+        VALUES (#fm_urls:CLOB#, #detail_os#, #detail_job:VARCHAR#, #detail_name:VARCHAR#, #age:VARCHAR#, #profile:CLOB#)
     </insert>
 
     <insert id="setCareerData" parameterClass="careerVO">
