@@ -3,7 +3,7 @@
 ### Description
 Crawlering dynamic and static data of Naver-people using Selenium and JSoup
 
-### Development Enviornment
+### Development Environment
 - MacOS
 - Java 1.8
 - JSoup
